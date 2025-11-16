@@ -1,6 +1,6 @@
 # Solar PV Potential Analysis - Sylhet District, Bangladesh
 
-## 📋 Project Overview
+##  Project Overview
 
 This repository contains a comprehensive **Spatio-Temporal Modeling of Solar Photovoltaic Potential** across Sylhet District, Bangladesh, using an integrated GIS-MCDM framework. The analysis identifies optimal deployment zones, quantifies economic viability, and provides actionable insights for sustainable energy planning.
 
@@ -498,13 +498,12 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) for deta
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- Bangladesh Meteorological Department for validation data
 - Bangladesh Power Development Board for grid infrastructure data
 - NASA POWER and PVGIS teams for satellite data access
 - OpenStreetMap contributors for infrastructure mapping
-- Metropolitan University for research support
+
 
 ---
 
