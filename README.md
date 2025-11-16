@@ -380,7 +380,7 @@ Generates:
 J. A. Prity, G. M. S. Iqbal, and J. M. Das, "Spatio-Temporal Modelling 
 of Solar Photovoltaic Potential across Sylhet District: A GIS-Based 
 Multi-Criteria Approach for Sustainable Energy Planning," in Proc. 
-IEEE Int. Conf. Renewable Energy, 2024.
+IEEE Int. Conf. Renewable Energy, 2026.
 ```
 
 **BibTeX:**
@@ -389,7 +389,7 @@ IEEE Int. Conf. Renewable Energy, 2024.
   title={Spatio-Temporal Modelling of Solar Photovoltaic Potential across Sylhet District: A GIS-Based Multi-Criteria Approach for Sustainable Energy Planning},
   author={Prity, Jarin Alam and Iqbal, G.M Sifat and Das, Joy Mony},
   booktitle={IEEE International Conference on Renewable Energy},
-  year={2024},
+  year={2026},
   organization={IEEE}
 }
 ```
