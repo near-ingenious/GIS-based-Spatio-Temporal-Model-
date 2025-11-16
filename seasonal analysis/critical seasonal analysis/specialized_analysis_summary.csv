@@ -1,0 +1,13 @@
+Metric,Value
+Total Sites Analyzed,400
+High Monsoon Risk Sites,68
+High Floating PV Suitability,11
+High Storage Priority Sites,2
+Economically Viable (LCOE<$0.09),279
+Priority Deployment Zones,63
+Average LCOE (All Sites),$0.0872
+Average IRR (%),142.6%
+Average Payback (Years),0.9
+Total FPV Potential (MW),92.0
+Avg Storage Criticality Score,0.249
+Avg Economic Viability Index,0.681

@@ -1,0 +1,29 @@
+Field_Name,Data_Type,Description
+Site_ID,String,Unique site identifier
+Latitude,Float,Latitude in decimal degrees (WGS84)
+Longitude,Float,Longitude in decimal degrees (WGS84)
+Elevation_m,Float,Elevation above sea level in meters
+Slope_degrees,Float,Terrain slope in degrees
+Distance_to_Grid_km,Float,Distance to nearest grid substation in km
+Distance_to_Road_km,Float,Distance to nearest road in km
+Population_Density_km2,Float,Population density per square km
+Water_Proximity_km,Float,Proximity to water bodies in km
+Water_Body_Area_ha,Float,Estimated water body area in hectares
+Flood_Risk_Score,Float,Flood risk probability score (0-1)
+Cyclone_Exposure,Float,Cyclone exposure index (0-1)
+Land_Degradation_Index,Float,Land degradation severity (0-1)
+Protected_Area_Proximity_km,Float,Distance to protected areas in km
+Grid_Capacity_MW,Float,Available grid capacity in MW
+Monsoon_Risk_Zone,String,Floating PV suitability composite score
+Floating_PV_Suitability,Float,Monsoon risk classification
+Storage_Criticality_Score,Float,Storage system criticality score
+Economic_Viability_Index,Float,Economic viability composite index
+Storage_Priority_Rank,Float,Levelized Cost of Electricity in USD/kWh
+Economic_Rank,Float,Internal Rate of Return in percent
+Floating_PV_Rank,Float,Payback period in years
+LCOE_USD_per_kWh,Float,Energy storage priority ranking
+Viability_Category,String,Economic performance ranking
+Payback_Period_years,Float,Floating PV opportunity ranking
+IRR_percent,Float,Composite deployment strategy score
+Deployment_Type,String,Solar PV deployment type classification
+Composite_Deployment_Score,Float,Economic viability category (HIGH/MEDIUM/LOW)
