@@ -176,7 +176,6 @@ python scripts/gis_export_tool.py
 ```
 
 Generates:
-- CSV files (WGS84 compatible)
 - GeoJSON files
 - QGIS project file
 - Field definitions
