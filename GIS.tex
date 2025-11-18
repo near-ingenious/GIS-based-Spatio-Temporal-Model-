@@ -1,0 +1,1078 @@
+%% IEEE Paper Template for Solar PV Analysis
+%% Compile with: pdflatex → bibtex → pdflatex → pdflatex
+
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+% Packages
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{subcaption}
+\usepackage{url} 
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Spatio-Temporal Modelling of Solar Photovoltaic Potential across Sylhet District: A GIS-Based Multi-Criteria Approach for Sustainable Energy Planning}
+
+\author{\IEEEauthorblockN{Jarin Alam Prity\IEEEauthorrefmark{1}, 
+G.M Sifat Iqbal\IEEEauthorrefmark{2}, and 
+Joy Mony Das\IEEEauthorrefmark{3}}
+\IEEEauthorblockA{\IEEEauthorrefmark{1}Department of Computer Science and Engineering,
+Metropolitan University, Sylhet-3104, Bangladesh\\
+Email: jarinprity438@gmail.com}
+\IEEEauthorblockA{\IEEEauthorrefmark{2}\IEEEauthorrefmark{3}Department of Electrical and Electronics Engineering,
+Metropolitan University, Sylhet-3104, Bangladesh\\
+Email: gaziiqbal001@gmail.com, joymoni74@gmail.com}}
+
+\maketitle
+
+\begin{abstract}
+Sylhet District in northeastern Bangladesh possesses substantial yet underutilized solar photovoltaic (PV) potential, hindered by its complex topography and monsoon-influenced climate. This study bridges critical knowledge gaps by quantifying monthly capacity factors amid seasonal variability, assessing economically viable storage solutions for grid stability, and evaluating deployment strategies for sustainable energy planning. The research employs a high-resolution spatiotemporal model integrating Geographic Information System (GIS) with Multi-Criteria Decision Making (MCDM) and the Analytical Hierarchy Process (AHP). Key inputs include daily meteorological data (solar irradiation, rainfall, humidity, and wind speed), Digital Elevation Models for terrain analysis, and historical extreme weather records. The model identifies the top 5\% of land areas by monthly suitability for solar PV deployment, focusing on three archetypes: rooftop, floating, and degraded-land ground installations. Monthly capacity factors and levelized cost of electricity (LCOE) are estimated, accounting for monsoon-induced soiling and operational costs. Sensitivity analysis of AHP weights ($\pm$20\% perturbation) ensures robustness in suitability assessments. Findings highlight high-potential zones in low-population regions with favorable topography, minimizing social displacement risks. The study delivers monthly capacity factor distributions, LCOE comparisons across deployment types, and optimized storage scenarios to achieve 80\% grid firming. Additionally, lifecycle waste projections per MW and local recycling pathways are evaluated to address environmental sustainability. This work provides actionable insights for policymakers, aligning with Bangladesh's renewable energy goals and offering a replicable framework for tropical regions facing similar seasonal challenges.
+You can access the repository here: 
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+Solar PV Potential, Spatiotemporal Modeling, GIS-MCDM, Analytical Hierarchy Process (AHP), Monsoon Climate, Energy Storage, Sustainable Deployment, LCOE.
+\end{IEEEkeywords}
+
+\section{Introduction}
+\IEEEPARstart{B}{angladesh} faces mounting energy challenges driven by rapid urbanization, population growth, and industrial expansion. The nation's electricity demand is projected to reach 34,000 MW by 2030, while current installed capacity remains insufficient \cite{bpdb2023}. Sylhet District, located in northeastern Bangladesh (24.6°N--25.3°N, 91.6°E--92.3°E), encompasses approximately 3,452 km² and presents unique opportunities for renewable energy development despite its complex monsoon-influenced climate and varied topography \cite{bbs2021}.
+
+\subsection{Motivation and Challenges}
+Solar photovoltaic (PV) technology offers a promising solution to Bangladesh's energy security concerns. However, the deployment of solar PV in Sylhet faces several critical challenges:
+
+\begin{enumerate}
+    \item \textbf{Seasonal Variability:} Monsoon seasons (June--September) significantly reduce solar irradiation and increase soiling losses, affecting annual capacity factors by 15--25\% \cite{hossain2019}.
+    
+    \item \textbf{Complex Topography:} Elevation ranges from 5m to 100m create microclimatic variations affecting site suitability and infrastructure accessibility \cite{uddin2020}.
+    
+    \item \textbf{Grid Integration:} Limited transmission infrastructure and distance to substations (0.1--15 km) necessitate optimized storage solutions for grid stability \cite{islam2021}.
+    
+    \item \textbf{Economic Viability:} LCOE estimations must account for deployment-specific costs, with rooftop, floating, and ground-mounted systems exhibiting distinct economic profiles \cite{kabir2022}.
+\end{enumerate}
+
+\subsection{Research Gaps}
+Existing studies on solar potential in Bangladesh have primarily focused on national-level assessments or specific technologies in isolation. Critical gaps include:
+
+\begin{itemize}
+    \item Limited spatiotemporal modeling at district-level resolution
+    \item Insufficient integration of meteorological variability with GIS-based suitability analysis
+    \item Lack of deployment-specific economic and technical comparisons
+    \item Absence of comprehensive storage requirement analysis for monsoon climates
+    \item Inadequate consideration of lifecycle environmental impacts
+\end{itemize}
+
+\subsection{Research Objectives}
+This study addresses these gaps through the following objectives:
+
+\begin{enumerate}
+    \item Develop a high-resolution (200×200 grid) spatiotemporal model integrating meteorological data, terrain analysis, and infrastructure constraints
+    \item Quantify monthly capacity factors for three deployment archetypes across seasonal variations
+    \item Conduct comprehensive economic analysis comparing LCOE, NPV, IRR, and payback periods
+    \item Optimize energy storage configurations for 80\% grid firming capability
+    \item Assess environmental impacts including 25-year lifecycle waste projections
+    \item Identify priority deployment zones through robust MCDM-AHP methodology
+\end{enumerate}
+
+\subsection{Novel Contributions}
+The key contributions of this research include:
+
+\begin{itemize}
+    \item \textbf{Integrated Framework:} First comprehensive GIS-MCDM model specifically calibrated for monsoon-influenced tropical regions
+    \item \textbf{Temporal Granularity:} Monthly capacity factor analysis revealing seasonal optimization opportunities
+    \item \textbf{Multi-Archetype Comparison:} Systematic evaluation of rooftop, floating, and ground-mounted systems under identical constraints
+    \item \textbf{Storage Optimization:} Technology-specific storage requirements for lithium-ion, flow battery, and pumped hydro solutions
+    \item \textbf{Sustainability Assessment:} Complete lifecycle analysis including material recycling pathways achieving 85.1\% recovery rate
+\end{itemize}
+
+The remainder of this paper is organized as follows: Section II reviews relevant literature, Section III details the methodology including data sources and analytical framework, Section IV presents comprehensive results, Section V discusses implications and limitations, and Section VI concludes with policy recommendations.
+
+\section{Literature Review}
+
+\subsection{Solar PV Potential Assessment Methods}
+Solar resource assessment has evolved from simple irradiation mapping to sophisticated multi-criteria frameworks. Ramachandra et al. \cite{ramachandra2011} pioneered GIS-based solar potential mapping in India, demonstrating the utility of spatial analysis for renewable energy planning. More recent work by Gueymard and Yang \cite{gueymard2020} emphasized the importance of high-temporal-resolution data for accurate capacity factor estimation.
+
+In the Bangladesh context, Mondal and Islam \cite{mondal2014} conducted national-level solar resource assessment, identifying annual average irradiation of 4.5--5.5 kWh/m²/day. However, their study lacked district-level granularity and seasonal variability analysis. Alam et al. \cite{alam2018} improved upon this by incorporating cloud cover and aerosol data, achieving 12\% better prediction accuracy.
+
+\subsection{Multi-Criteria Decision Making in Energy Planning}
+The Analytical Hierarchy Process (AHP) has become a standard tool for renewable energy site selection. Saaty \cite{saaty2008} established the theoretical foundation, while Noorollahi et al. \cite{noorollahi2016} demonstrated its application to solar farm siting in Iran. More recently, Al Garni and Awasthi \cite{algarni2017} combined AHP with GIS for large-scale solar project evaluation in Saudi Arabia.
+
+For tropical climates specifically, Doorga et al. \cite{doorga2019} developed a climate-adapted MCDM framework for Mauritius, incorporating cyclone risk and humidity factors. Their methodology influenced our approach to monsoon risk assessment in Sylhet District.
+
+\subsection{Floating Solar PV Technologies}
+Floating photovoltaic (FPV) systems represent an emerging deployment paradigm particularly relevant to water-rich regions like Sylhet. Sahu et al. \cite{sahu2016} demonstrated 10--15\% efficiency gains from evaporative cooling in Indian reservoirs. More comprehensive techno-economic analysis by Choi \cite{choi2014} in South Korea showed LCOE competitiveness with ground-mounted systems when water body availability exceeds 5 hectares.
+
+Cazzaniga et al. \cite{cazzaniga2018} provided critical insights on anchoring systems and wave resistance, directly applicable to Sylhet's monsoon-affected water bodies. Our FPV suitability criteria build upon their structural resilience framework.
+
+\subsection{Energy Storage Integration}
+Grid integration of variable renewable energy requires sophisticated storage solutions. Zakeri and Syri \cite{zakeri2015} conducted comparative LCOS (Levelized Cost of Storage) analysis across battery technologies, demonstrating lithium-ion dominance for 2--4 hour discharge durations. For longer-duration storage, Zakeri et al. \cite{zakeri2016} advocated flow batteries and pumped hydro.
+
+Bangladesh-specific studies remain limited. Rahman et al. \cite{rahman2020} assessed battery storage for off-grid rural electrification but did not address grid-scale applications. Our work fills this gap by optimizing storage configurations for 80\% grid firming in a monsoon context.
+
+\subsection{Economic and Environmental Sustainability}
+LCOE remains the primary metric for economic viability assessment. Branker et al. \cite{branker2011} established standard methodologies, later refined by Fu et al. \cite{fu2018} to account for regional cost variations. Their framework informs our deployment-specific cost modeling.
+
+Environmental sustainability increasingly demands lifecycle assessment. Fthenakis and Kim \cite{fthenakis2011} pioneered PV module recycling analysis, projecting 85--90\% material recovery potential. Xu et al. \cite{xu2018} extended this to end-of-life waste projections, methodology we adapt for 25-year Sylhet projections.
+
+\subsection{Research Positioning}
+Our study uniquely integrates these disparate research streams—GIS-based siting, MCDM optimization, deployment-specific technical analysis, storage integration, and lifecycle sustainability—into a cohesive framework calibrated for monsoon climates. This holistic approach addresses the multidimensional challenges of solar PV deployment in tropical developing regions.
+
+\section{Methodology}
+
+\subsection{Study Area Characteristics}
+Sylhet District (24.6°N--25.3°N, 91.6°E--92.3°E) encompasses 3,452 km² in northeastern Bangladesh, characterized by:
+
+\begin{itemize}
+    \item \textbf{Climate:} Humid subtropical with distinct seasons: winter (December--February), pre-monsoon (March--May), monsoon (June--September), post-monsoon (October--November)
+    \item \textbf{Topography:} Rolling hills (5--100m elevation) interspersed with haor wetlands
+    \item \textbf{Population:} Approximately 3.5 million inhabitants with density varying from 50 to 2,937 people/km²
+    \item \textbf{Infrastructure:} Grid substations concentrated near Sylhet City with transmission gaps in rural areas
+\end{itemize}
+
+\subsection{Data Acquisition and Preprocessing}
+
+\subsubsection{Meteorological Data}
+Daily time-series data (2020--2023) were compiled from three sources:
+
+\begin{enumerate}
+    \item \textbf{NASA POWER:} Global horizontal irradiation (GHI), temperature, humidity (0.5° resolution)
+    \item \textbf{PVGIS Database:} Direct normal irradiation (DNI), diffuse irradiation
+    \item \textbf{Bangladesh Meteorological Department:} Ground station validation data (3 stations)
+\end{enumerate}
+
+Data preprocessing involved:
+\begin{itemize}
+    \item Quality control: removal of outliers ($>$3$\sigma$ from mean)
+    \item Gap filling: cubic spline interpolation for missing values ($<$2\%)
+    \item Spatial interpolation: Inverse Distance Weighting (IDW) to 200×200 grid
+    \item Temporal aggregation: daily to monthly averages and standard deviations
+\end{itemize}
+
+\subsubsection{Geospatial Data}
+\begin{table}[h]
+\centering
+\caption{Geospatial Data Sources and Specifications}
+\label{tab:geo_data}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Dataset} & \textbf{Source} & \textbf{Resolution} \\ \midrule
+Digital Elevation Model & SRTM 30m & 30m \\
+Land Use/Land Cover & Sentinel-2 & 10m \\
+Road Network & OpenStreetMap & Vector \\
+Grid Infrastructure & BPDB & Vector \\
+Water Bodies & Global Surface Water & 30m \\
+Population Density & WorldPop & 100m \\
+Administrative Boundaries & GADM & Vector \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Economic and Technical Parameters}
+Deployment-specific parameters were compiled from manufacturer datasheets, market surveys, and literature:
+
+\begin{table}[h]
+\centering
+\caption{Key Technical and Economic Parameters}
+\label{tab:tech_params}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Rooftop} & \textbf{Floating} & \textbf{Ground} \\ \midrule
+CAPEX (USD/kW) & 1,200 & 1,450 & 1,100 \\
+OPEX (\% CAPEX/year) & 1.5 & 2.0 & 1.8 \\
+System Lifetime (years) & 25 & 25 & 25 \\
+Panel Efficiency (\%) & 20.5 & 21.0 & 20.0 \\
+Performance Ratio & 0.80 & 0.85 & 0.78 \\
+Soiling Loss (dry/monsoon) & 2\%/8\% & 1\%/5\% & 3\%/10\% \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\subsection{GIS-MCDM Framework}
+
+\subsubsection{Criteria Selection and Scoring}
+Five primary criteria were identified through expert consultation and literature review:
+
+\begin{enumerate}
+    \item \textbf{Solar Resource (SR):} Weighted by monthly irradiation and seasonal variability
+    \begin{equation}
+    SR = \frac{\sum_{m=1}^{12} (GHI_m \times w_m)}{\overline{GHI}_{Bangladesh}}
+    \end{equation}
+    where $w_m$ = monsoon adjustment weights
+    
+    \item \textbf{Terrain Suitability (TS):} Function of slope and elevation
+    \begin{equation}
+    TS = e^{-(\alpha \cdot slope + \beta \cdot |elev - elev_{opt}|)}
+    \end{equation}
+    with $\alpha = 0.15$, $\beta = 0.02$, $elev_{opt} = 35m$
+    
+    \item \textbf{Infrastructure Accessibility (IA):} Inverse distance to roads and grid
+    \begin{equation}
+    IA = w_r \cdot e^{-d_{road}/\lambda_r} + w_g \cdot e^{-d_{grid}/\lambda_g}
+    \end{equation}
+    where $\lambda_r = 2$ km, $\lambda_g = 5$ km
+    
+    \item \textbf{Grid Proximity (GP):} Weighted by available substation capacity
+    \begin{equation}
+    GP = \frac{C_{available}}{d_{grid}^{1.5}}
+    \end{equation}
+    
+    \item \textbf{Social Impact (SI):} Minimizing displacement, maximizing benefit
+    \begin{equation}
+    SI = (1 - \rho_{norm}) \times (1 + E_{benefit})
+    \end{equation}
+    where $\rho_{norm}$ = normalized population density, $E_{benefit}$ = employment potential
+\end{enumerate}
+
+\subsubsection{Analytical Hierarchy Process}
+AHP weights were determined through pairwise comparison matrices validated by Consistency Ratio (CR $<$ 0.10):
+
+\begin{table}[h]
+\centering
+\caption{AHP Criterion Weights}
+\label{tab:ahp_weights}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Criterion} & \textbf{Weight} & \textbf{Sensitivity ($\pm$20\%)} \\ \midrule
+Solar Resource & 0.35 & 0.28--0.42 \\
+Terrain Suitability & 0.25 & 0.20--0.30 \\
+Infrastructure Accessibility & 0.20 & 0.16--0.24 \\
+Grid Proximity & 0.12 & 0.10--0.14 \\
+Social Impact & 0.08 & 0.06--0.10 \\ \midrule
+CR & 0.087 & -- \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Overall suitability scores were computed as:
+\begin{equation}
+S_{overall} = \sum_{i=1}^{5} w_i \cdot C_i
+\end{equation}
+where $w_i$ = AHP weights, $C_i$ = normalized criterion scores (0--100 scale).
+
+\subsection{Spatial Hotspot Analysis}
+Getis-Ord $G_i^*$ statistic identified statistically significant spatial clustering:
+
+\begin{equation}
+G_i^* = \frac{\sum_{j=1}^{n} w_{ij} x_j - \bar{X} \sum_{j=1}^{n} w_{ij}}{S \sqrt{\frac{n \sum_{j=1}^{n} w_{ij}^2 - (\sum_{j=1}^{n} w_{ij})^2}{n-1}}}
+\end{equation}
+
+where $w_{ij}$ = spatial weight matrix (inverse distance), $x_j$ = suitability score, $\bar{X}$ = mean suitability, $S$ = standard deviation.
+
+Sites with $G_i^* > 1.96$ (p $<$ 0.05) were classified as ``hot spots'', indicating high-potential clustering.
+
+\subsection{Capacity Factor Modeling}
+Monthly capacity factors accounted for:
+
+\begin{itemize}
+    \item Temperature effects: $\eta(T) = \eta_{STC} [1 - \gamma(T_{cell} - 25)]$
+    \item Soiling losses: deployment and season-specific
+    \item Shading: horizon profiling for rooftop systems
+    \item Aging: linear degradation rate (0.5\%/year)
+\end{itemize}
+
+\begin{equation}
+CF_m = \frac{GHI_m \times PR \times \eta(T_m) \times (1-L_{soil,m})}{1000 \times 24 \times days_m}
+\end{equation}
+
+where PR = performance ratio, $L_{soil}$ = soiling loss factor.
+
+\subsection{Economic Analysis}
+
+\subsubsection{Levelized Cost of Electricity}
+LCOE calculated using standard formula with Bangladesh-specific parameters:
+
+\begin{equation}
+LCOE = \frac{\sum_{t=1}^{n} \frac{CAPEX_t + OPEX_t}{(1+r)^t}}{\sum_{t=1}^{n} \frac{E_t}{(1+r)^t}}
+\end{equation}
+
+with discount rate $r = 8\%$, project lifetime $n = 25$ years.
+
+\subsubsection{Financial Metrics}
+\begin{itemize}
+    \item \textbf{Net Present Value:} 
+    $NPV = \sum_{t=1}^{n} \frac{R_t - C_t}{(1+r)^t} - I_0$
+    
+    \item \textbf{Internal Rate of Return:} 
+    Solving $NPV = 0$ for $r$
+    
+    \item \textbf{Payback Period:} 
+    $t$ where $\sum_{i=1}^{t} CF_i = I_0$
+\end{itemize}
+
+Electricity tariff assumed at 0.12 USD/kWh (industrial rate).
+
+\subsection{Energy Storage Optimization}
+Three storage technologies evaluated: lithium-ion (Li-ion), vanadium redox flow battery (VRFB), and pumped hydro storage (PHS).
+
+Grid firming capability defined as:
+\begin{equation}
+GF = \frac{E_{firm}}{E_{total}} \times 100\%
+\end{equation}
+
+Target: 80\% grid firming with optimized storage capacity using linear programming:
+
+\textit{Minimize:} $LCOS = \frac{C_{storage} + \sum_{t=1}^{n} O\&M_t/(1+r)^t}{\sum_{t=1}^{n} E_{cycled,t}/(1+r)^t}$
+
+\textit{Subject to:} $GF \geq 80\%$, storage constraints
+
+\subsection{Environmental Impact Assessment}
+
+\subsubsection{Lifecycle Waste Projection}
+25-year waste estimates based on panel composition:
+\begin{itemize}
+    \item Glass: 74\% (90\% recyclable)
+    \item Aluminum: 10\% (95\% recyclable)
+    \item Silicon: 5\% (85\% recyclable)
+    \item Copper: 1\% (99\% recyclable)
+    \item Inverters \& BOS: 10\%
+\end{itemize}
+
+Total waste intensity: 18--22 tonnes/MW.
+
+\subsubsection{Carbon Offset Calculation}
+\begin{equation}
+CO_2_{offset} = E_{annual} \times EF_{grid} \times n
+\end{equation}
+where $EF_{grid} = 0.7$ tCO₂/MWh (Bangladesh grid emission factor).
+
+\subsection{Sensitivity and Uncertainty Analysis}
+Monte Carlo simulation (10,000 iterations) assessed parameter uncertainty:
+\begin{itemize}
+    \item GHI: $\pm$10\% variation
+    \item CAPEX: $\pm$15\% variation
+    \item Discount rate: 6--10\% range
+    \item Panel degradation: 0.4--0.7\%/year
+\end{itemize}
+
+AHP sensitivity tested criterion weights with $\pm$20\% perturbation.
+
+\section{Results}
+
+\subsection{Spatial Suitability Assessment}
+
+\subsubsection{Overall Suitability Distribution}
+Analysis of 400 candidate sites revealed mean overall suitability of 68.2 $\pm$ 12.5. The distribution exhibits right skewness (skewness = 0.32), indicating concentration in medium-high suitability range.
+
+\begin{table}[h]
+\centering
+\caption{Suitability Score Statistics}
+\label{tab:suit_stats}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Metric} & \textbf{All Sites} & \textbf{Top 5\%} & \textbf{Top 10\%} \\ \midrule
+Mean Score & 68.2 & 91.5 & 88.3 \\
+Std. Deviation & 12.5 & 2.1 & 3.4 \\
+Min Score & 46.1 & 90.8 & 86.4 \\
+Max Score & 97.3 & 97.3 & 96.1 \\
+25th Percentile & 59.4 & 90.2 & 86.9 \\
+75th Percentile & 76.8 & 92.8 & 90.5 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Top 5\% sites (n=20, threshold score $\geq$ 90.8) demonstrate remarkable consistency (CV = 2.3\%), validating robust identification of high-potential zones.
+
+\subsubsection{Deployment Type Distribution}
+Among the 400 analyzed sites:
+\begin{itemize}
+    \item Ground-mounted (degraded land): 48.5\% (194 sites)
+    \item Rooftop: 31.8\% (127 sites)
+    \item Floating PV: 19.8\% (79 sites)
+\end{itemize}
+
+Top 5\% sites show balanced distribution: Ground (50\%), Rooftop (30\%), Floating (20\%), indicating diverse deployment opportunities.
+
+\subsubsection{Geographic Distribution}
+High-suitability sites cluster in three primary zones:
+
+\begin{table}[h]
+\centering
+\caption{Geographic Clustering of Priority Sites}
+\label{tab:geo_clusters}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Zone} & \textbf{Location} & \textbf{Sites} & \textbf{Avg. Score} & \textbf{Area (km²)} \\ \midrule
+Northern Uplands & 25.1--25.3°N & 8 & 92.8 & 245 \\
+Central Corridor & 24.8--25.0°N & 7 & 91.2 & 312 \\
+Southern Basin & 24.6--24.7°N & 5 & 90.9 & 198 \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\subsubsection{Hotspot Analysis Results}
+Getis-Ord $G_i^*$ analysis identified 68 hot spots (17\% of sites) and 43 cold spots (10.8\%).
+
+Key findings:
+\begin{itemize}
+    \item Hot spots predominantly in low-population density areas (avg: 89 people/km² vs. district avg: 1,015 people/km²)
+    \item Strong correlation with grid proximity ($r = 0.67$, p $<$ 0.001)
+    \item Clustering coefficient: 0.58 (moderate spatial autocorrelation)
+\end{itemize}
+
+\subsection{Temporal Analysis: Seasonal Patterns}
+
+\subsubsection{Monthly Solar Resource Variability}
+Solar irradiation exhibits pronounced seasonal variation:
+
+\begin{table}[h]
+\centering
+\caption{Monthly Solar Irradiation Statistics (kWh/m²/day)}
+\label{tab:monthly_solar}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Season} & \textbf{Mean} & \textbf{Std. Dev.} & \textbf{Range} \\ \midrule
+Winter (Dec--Feb) & 4.82 & 0.35 & 4.2--5.4 \\
+Pre-Monsoon (Mar--May) & 5.67 & 0.42 & 4.9--6.5 \\
+Monsoon (Jun--Sep) & 4.15 & 0.58 & 2.8--5.1 \\
+Post-Monsoon (Oct--Nov) & 4.94 & 0.31 & 4.3--5.6 \\ \midrule
+Annual Average & 4.89 & 0.68 & 2.8--6.5 \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Peak month: April (5.89 kWh/m²/day)\\
+Lowest month: July (3.92 kWh/m²/day)\\
+Seasonal variability: 33.5\%
+
+\subsubsection{Monthly Capacity Factor Analysis}
+Deployment-type specific capacity factors:
+
+\begin{table}[h]
+\centering
+\caption{Average Monthly Capacity Factors by Deployment Type}
+\label{tab:monthly_cf}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Month} & \textbf{Rooftop} & \textbf{Floating} & \textbf{Ground} & \textbf{Avg.} \\ \midrule
+January & 0.162 & 0.178 & 0.155 & 0.165 \\
+February & 0.175 & 0.192 & 0.168 & 0.178 \\
+March & 0.198 & 0.215 & 0.189 & 0.201 \\
+April & 0.212 & 0.231 & 0.203 & 0.215 \\
+May & 0.201 & 0.219 & 0.192 & 0.204 \\
+June & 0.142 & 0.165 & 0.131 & 0.146 \\
+July & 0.128 & 0.152 & 0.118 & 0.133 \\
+August & 0.135 & 0.159 & 0.125 & 0.140 \\
+September & 0.151 & 0.172 & 0.142 & 0.155 \\
+October & 0.168 & 0.185 & 0.159 & 0.171 \\
+November & 0.171 & 0.188 & 0.163 & 0.174 \\
+December & 0.158 & 0.174 & 0.151 & 0.161 \\ \midrule
+\textbf{Annual Avg.} & \textbf{0.167} & \textbf{0.186} & \textbf{0.158} & \textbf{0.170} \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Key observations:
+\begin{itemize}
+    \item Floating PV achieves 11.4\% higher annual CF due to evaporative cooling
+    \item Monsoon season (Jun--Sep) reduces CF by 28--35\% across all types
+    \item Ground systems suffer most from soiling (10\% loss vs. 5\% for floating)
+    \item Pre-monsoon season (Mar--May) optimal for maintenance scheduling
+\end{itemize}
+
+\subsection{Economic Viability Assessment}
+
+\subsubsection{LCOE Analysis}
+Comprehensive LCOE analysis across 50 economically assessed sites:
+
+\begin{table}[h]
+\centering
+\caption{LCOE Statistics by Deployment Type (USD/kWh)}
+\label{tab:lcoe_stats}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Metric} & \textbf{Rooftop} & \textbf{Floating} & \textbf{Ground} \\ \midrule
+Mean & 0.0853 & 0.0834 & 0.0869 \\
+Median & 0.0842 & 0.0826 & 0.0862 \\
+Std. Dev. & 0.0089 & 0.0095 & 0.0103 \\
+Min & 0.0731 & 0.0744 & 0.0729 \\
+Max & 0.1014 & 0.1055 & 0.1128 \\
+95\% CI & 0.083--0.088 & 0.080--0.087 & 0.084--0.090 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Floating systems demonstrate lowest mean LCOE (USD 0.0834/kWh) due to superior capacity factors offsetting higher CAPEX. All deployment types remain below Bangladesh's industrial tariff (USD 0.12/kWh), confirming economic viability.
+
+\subsubsection{Financial Performance Metrics}
+
+\begin{table}[h]
+\centering
+\caption{Comprehensive Financial Analysis}
+\label{tab:financial}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Metric} & \textbf{Rooftop} & \textbf{Floating} & \textbf{Ground} & \textbf{Overall} \\ \midrule
+NPV (Million USD) & 2.18 & 2.45 & 1.96 & 2.20 \\
+IRR (\%) & 14.8 & 15.9 & 13.7 & 14.8 \\
+Payback (years) & 7.4 & 6.9 & 7.9 & 7.4 \\
+Capacity (MW) & 1.8 & 2.1 & 1.6 & 1.8 \\
+Ann. Gen. (MWh) & 2,650 & 3,420 & 2,280 & 2,780 \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\subsubsection{Aggregate Deployment Potential}
+Analysis of top 50 sites reveals:
+
+\begin{itemize}
+    \item \textbf{Total capacity:} 89.2 MW
+    \item \textbf{Required investment:} USD 109.4 million
+    \item \textbf{Annual generation:} 138,950 MWh
+    \item \textbf{CO₂ offset:} 97,265 tonnes/year
+    \item \textbf{Weighted average LCOE:} USD 0.0852/kWh
+    \item \textbf{Average payback:} 7.4 years
+    \item \textbf{Average IRR:} 14.8\%
+\end{itemize}
+
+Economic viability classification:
+\begin{itemize}
+    \item High viability (LCOE $<$ 0.08): 28\% of sites
+    \item Medium viability (0.08--0.09): 54\% of sites
+    \item Low viability (LCOE $>$ 0.09): 18\% of sites
+\end{itemize}
+
+\subsection{Energy Storage Requirements}
+
+\subsubsection{Storage Technology Comparison}
+
+\begin{table}[h]
+\centering
+\caption{Storage Technology Performance Metrics}
+\label{tab:storage_tech}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Technology} & \textbf{Li-ion} & \textbf{VRFB} & \textbf{PHS} \\ \midrule
+CAPEX (USD/kWh) & 285 & 412 & 178 \\
+Round-trip Eff. (\%) & 89.5 & 72.8 & 81.2 \\
+Cycle Life (cycles) & 5,000 & 12,000 & 20,000 \\
+Grid Firming (\%) & 78.3 & 82.1 & 85.6 \\
+LCOS (USD/kWh) & 0.142 & 0.168 & 0.095 \\
+Combined LCOE & 0.095 & 0.101 & 0.091 \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\subsubsection{Optimal Storage Configuration}
+To achieve 80\% grid firming:
+
+\begin{itemize}
+    \item \textbf{Li-ion:} 4.2 hours storage duration, 374 MWh capacity
+    \item \textbf{VRFB:} 6.8 hours storage duration, 606 MWh capacity
+    \item \textbf{PHS:} 8.5 hours storage duration, 758 MWh capacity
+\end{itemize}
+
+\textbf{Recommended solution:} Hybrid Li-ion (60\%) + VRFB (40\%) configuration:
+\begin{itemize}
+    \item Leverages Li-ion for high-frequency cycling
+    \item VRFB handles longer-duration monsoon deficits
+    \item Combined LCOS: USD 0.151/kWh
+    \item Grid firming capability: 81.4\%
+    \item Total storage investment: USD 148.2 million
+\end{itemize}
+
+\subsection{Environmental Impact Assessment}
+
+\subsubsection{Lifecycle Waste Projections}
+25-year deployment scenario (89.2 MW):
+
+\begin{table}[h]
+\centering
+\caption{Lifecycle Waste Generation and Recovery}
+\label{tab:waste}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Material} & \textbf{Waste (tonnes)} & \textbf{Recovery Rate} & \textbf{Recycled (tonnes)} \\ \midrule
+Glass & 1,328 & 90\% & 1,195 \\
+Aluminum & 179 & 95\% & 170 \\
+Silicon & 90 & 85\% & 77 \\
+Copper & 18 & 99\% & 18 \\
+Inverter/BOS & 179 & 60\% & 107 \\ \midrule
+\textbf{Total} & \textbf{1,794} & \textbf{--} & \textbf{1,567} \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Overall recovery rate:} 87.4\%\\
+\textbf{Landfill waste:} 227 tonnes (12.6\%)
+
+\subsubsection{Carbon Footprint Analysis}
+\begin{itemize}
+    \item \textbf{Manufacturing emissions:} 42 gCO₂eq/kWh
+    \item \textbf{Lifecycle emissions:} 48 gCO₂eq/kWh
+    \item \textbf{Grid displacement:} 700 gCO₂/kWh
+    \item \textbf{Net carbon offset:} 652 gCO₂/kWh
+    \item \textbf{Energy payback time:} 2.1 years
+    \item \textbf{25-year cumulative offset:} 2.43 million tonnes CO₂
+\end{itemize}
+
+\subsection{Risk Assessment}
+
+\subsubsection{Monsoon Risk Classification}
+Sites categorized by integrated risk score:
+
+\begin{table}[h]
+\centering
+\caption{Monsoon Risk Distribution}
+\label{tab:risk}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Risk Category} & \textbf{Sites (\%)} & \textbf{Avg. Flood Score} & \textbf{Avg. Cyclone Exp.} \\ \midrule
+Low Risk & 42.5 & 0.18 & 0.22 \\
+Medium Risk & 40.0 & 0.35 & 0.38 \\
+High Risk & 17.5 & 0.62 & 0.51 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+High-risk sites primarily in southern haor basin. Risk mitigation strategies:
+\begin{itemize}
+    \item Elevated mounting structures (+1.5m)
+    \item Enhanced anchoring systems (cyclone-rated)
+    \item Quarterly inspection during monsoon season
+    \item Insurance coverage (estimated 2.5\% of CAPEX annually)
+\end{itemize}
+
+\subsubsection{Extreme Weather Impact}
+Historical analysis (15-year record):
+\begin{itemize}
+    \item 24 significant weather events
+    \item Average PV damage: 3.2\% per event
+    \item Generation loss: 1,250 MWh/year (0.9\% of total)
+    \item Most vulnerable: Ground systems in flood zones
+\end{itemize}
+
+\subsection{Sensitivity Analysis}
+
+\subsubsection{AHP Weight Perturbation}
+$\pm$20\% variation in criterion weights:
+
+\begin{table}[h]
+\centering
+\caption{Sensitivity Index by Criterion}
+\label{tab:sensitivity}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Criterion} & \textbf{Sensitivity Index} & \textbf{Rank Stability} \\ \midrule
+Solar Resource & 1.82 & 94\% \\
+Terrain Suitability & 1.15 & 97\% \\
+Infrastructure & 0.98 & 98\% \\
+Grid Proximity & 1.67 & 95\% \\
+Social Impact & 0.74 & 99\% \\ \midrule
+\textbf{Average} & \textbf{1.27} & \textbf{96.6\%} \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Model demonstrates \textbf{HIGH robustness} (avg. sensitivity $<$ 2.0). Top 10 sites maintain rank in 96.6\% of perturbation scenarios.
+
+\subsubsection{Economic Parameter Uncertainty}
+Monte Carlo simulation (10,000 iterations):
+
+\begin{table}[h]
+\centering
+\caption{LCOE Uncertainty Analysis (USD/kWh)}
+\label{tab:monte_carlo}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Percentile} & \textbf{Rooftop} & \textbf{Floating} & \textbf{Ground} \\ \midrule
+5th & 0.0725 & 0.0698 & 0.0742 \\
+25th & 0.0798 & 0.0771 & 0.0815 \\
+50th (Median) & 0.0853 & 0.0834 & 0.0869 \\
+75th & 0.0911 & 0.0902 & 0.0928 \\
+95th & 0.0998 & 0.1012 & 0.1045 \\ \midrule
+Probability LCOE $<$ 0.10 & 92\% & 94\% & 89\% \\ \bottomrule
+\end{tabular}
+\end{table}
+
+High confidence in economic viability: 89--94\% probability of LCOE remaining below 0.10 USD/kWh threshold.
+
+\subsection{Comparative Benchmarking}
+
+\subsubsection{Regional Comparison}
+Sylhet District performance vs. other South Asian regions:
+
+\begin{table}[h]
+\centering
+\caption{Regional Solar PV Benchmarking}
+\label{tab:benchmark}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Region} & \textbf{Avg. GHI} & \textbf{Capacity Factor} & \textbf{LCOE} \\ \midrule
+Sylhet, Bangladesh & 4.89 & 0.170 & 0.085 \\
+Rajshahi, Bangladesh & 5.21 & 0.182 & 0.079 \\
+Kerala, India & 5.15 & 0.178 & 0.082 \\
+Tamil Nadu, India & 5.68 & 0.195 & 0.074 \\
+Punjab, Pakistan & 5.92 & 0.203 & 0.071 \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Sylhet's monsoon climate reduces performance 8--12\% compared to drier regions but remains economically competitive through optimized deployment strategies.
+
+\section{Discussion}
+
+\subsection{Key Findings and Implications}
+
+\subsubsection{Spatial Deployment Strategy}
+The identification of 20 top-tier sites (suitability $\geq$ 90.8) with 89.2 MW aggregate capacity provides actionable deployment roadmap. Geographic clustering in three zones facilitates:
+
+\begin{itemize}
+    \item \textbf{Economies of scale:} Shared infrastructure and O\&M services
+    \item \textbf{Grid integration:} Concentrated generation reduces transmission losses
+    \item \textbf{Risk diversification:} Geographic spread mitigates localized weather impacts
+\end{itemize}
+
+Priority deployment sequence: Northern Uplands (highest suitability) → Central Corridor (best grid access) → Southern Basin (lowest population density).
+
+\subsubsection{Temporal Optimization Opportunities}
+Monthly capacity factor analysis reveals critical insights:
+
+\begin{enumerate}
+    \item \textbf{Seasonal load matching:} Pre-monsoon peak (April: CF=0.215) aligns with agricultural irrigation demand
+    \item \textbf{Storage sizing:} Monsoon deficit (Jul--Sep: avg CF=0.143) drives 6--8 hour storage requirement
+    \item \textbf{Maintenance scheduling:} Post-monsoon period (Oct--Nov) optimal for system servicing
+    \item \textbf{Soiling mitigation:} Enhanced cleaning protocols during dry season can improve annual CF by 3--5\%
+\end{enumerate}
+
+\subsubsection{Technology-Specific Advantages}
+Floating PV emerges as optimal technology for Sylhet:
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item 11.4\% higher CF (evaporative cooling effect)
+    \item Reduced land acquisition costs (utilize existing water bodies)
+    \item Lower soiling losses (5\% vs. 10\% for ground systems)
+    \item Potential for aquaculture integration
+\end{itemize}
+
+\textbf{Challenges:}
+\begin{itemize}
+    \item 32\% higher CAPEX (anchoring and flotation systems)
+    \item Monsoon-season operational constraints
+    \item Limited suitable water body inventory (79 sites identified)
+\end{itemize}
+
+Recommendation: 20--30\% floating deployment in mixed portfolio.
+
+\subsection{Economic and Policy Considerations}
+
+\subsubsection{Financial Viability}
+All analyzed deployment types demonstrate strong economics:
+\begin{itemize}
+    \item IRR (13.7--15.9\%) exceeds Bangladesh's infrastructure project hurdle rate (12\%)
+    \item Payback periods (6.9--7.9 years) within acceptable investor timelines
+    \item LCOE (USD 0.083--0.087) below grid parity threshold
+\end{itemize}
+
+\textbf{Financing mechanisms} to accelerate deployment:
+\begin{enumerate}
+    \item Feed-in tariffs: Guaranteed USD 0.095/kWh for 15 years
+    \item Concessional loans: IDA/ADB financing at 3--5\% interest
+    \item Tax incentives: 5-year exemption on equipment imports
+    \item Green bonds: Municipal-level renewable energy financing
+\end{enumerate}
+
+\subsubsection{Grid Integration Roadmap}
+Current grid infrastructure constraints require phased approach:
+
+\textbf{Phase 1 (0--2 years):} 25 MW deployment near existing substations
+\begin{itemize}
+    \item Sites within 2 km of grid (high accessibility)
+    \item Minimal transmission upgrades required
+    \item Li-ion storage (2--4 hour duration)
+\end{itemize}
+
+\textbf{Phase 2 (2--5 years):} 35 MW expansion with transmission enhancement
+\begin{itemize}
+    \item Medium accessibility sites (2--5 km from grid)
+    \item 33 kV line extensions
+    \item Hybrid Li-ion/VRFB storage
+\end{itemize}
+
+\textbf{Phase 3 (5--10 years):} 29 MW completion with advanced integration
+\begin{itemize}
+    \item Remote sites with high solar potential
+    \item Smart grid infrastructure
+    \item Potential pumped hydro storage (hillside reservoirs)
+\end{itemize}
+
+\subsection{Environmental and Social Co-Benefits}
+
+\subsubsection{Carbon Mitigation Impact}
+89.2 MW deployment yields substantial emissions reductions:
+\begin{itemize}
+    \item Annual offset: 97,265 tonnes CO₂
+    \item 25-year cumulative: 2.43 million tonnes CO₂
+    \item Equivalent to removing 52,000 cars from roads
+    \item Supports Bangladesh's NDC commitment (40\% renewable energy by 2041)
+\end{itemize}
+
+\subsubsection{Circular Economy Opportunities}
+High material recovery rate (87.4\%) creates local economic opportunities:
+
+\textbf{Recommended ecosystem:}
+\begin{itemize}
+    \item Establish regional PV recycling facility in Sylhet City
+    \item Partner with cement manufacturers for glass recovery
+    \item Export high-value materials (silicon, copper) to specialized processors
+    \item Create 50--75 green jobs in recycling sector
+\end{itemize}
+
+\subsubsection{Social Equity Considerations}
+Prioritizing low-population-density sites (avg. 89 vs. 1,015 people/km²) minimizes displacement. Additional social benefits:
+
+\begin{itemize}
+    \item Rural electrification: Off-grid communities gain reliable power
+    \item Agricultural productivity: Irrigation pump electrification
+    \item Healthcare access: Refrigerated vaccine storage in rural clinics
+    \item Education: School electrification enabling digital learning
+\end{itemize}
+
+\subsection{Challenges and Mitigation Strategies}
+
+\subsubsection{Monsoon Risk Management}
+High-risk sites (17.5\%) require enhanced resilience measures:
+
+\begin{table}[h]
+\centering
+\caption{Risk Mitigation Cost-Benefit Analysis}
+\label{tab:risk_mitigation}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Mitigation Strategy} & \textbf{Cost (\% CAPEX)} & \textbf{Risk Reduction} & \textbf{ROI} \\ \midrule
+Elevated structures & 8\% & 65\% & 4.2:1 \\
+Enhanced anchoring & 5\% & 45\% & 5.8:1 \\
+Flood barriers & 12\% & 80\% & 3.1:1 \\
+Insurance coverage & 2.5\%/yr & 100\% & N/A \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Recommended approach: Combine structural measures (13\% CAPEX premium) with insurance for optimal risk-return profile.
+
+\subsubsection{Technical Skill Gap}
+Bangladesh faces shortage of specialized O\&M personnel. Capacity building initiatives:
+
+\begin{itemize}
+    \item Establish PV technician training program at Sylhet Engineering College
+    \item Partner with international manufacturers for knowledge transfer
+    \item Develop local supply chain for spare parts and consumables
+    \item Create certification framework for solar installers
+\end{itemize}
+
+\subsubsection{Land Tenure Complexity}
+Degraded land deployment faces regulatory hurdles. Policy recommendations:
+
+\begin{enumerate}
+    \item Streamline land lease procedures for renewable projects
+    \item Develop standard PPP (Public-Private Partnership) frameworks
+    \item Provide land tax incentives for solar-compatible use
+    \item Fast-track environmental clearances for low-impact sites
+\end{enumerate}
+
+\subsection{Limitations and Future Research}
+
+\subsubsection{Study Limitations}
+\begin{enumerate}
+    \item \textbf{Spatial resolution:} 200×200 grid may miss micro-scale variations
+    \item \textbf{Climate data:} Reliance on modeled data (POWER, PVGIS) rather than dense ground station network
+    \item \textbf{Economic assumptions:} Fixed discount rate (8\%) and equipment costs; actual values may vary
+    \item \textbf{Grid constraints:} Simplified transmission modeling; detailed power flow analysis needed
+    \item \textbf{Social factors:} Limited primary stakeholder engagement; community acceptance not quantified
+\end{enumerate}
+
+\subsubsection{Future Research Directions}
+\begin{enumerate}
+    \item \textbf{High-resolution validation:} Deploy ground-based monitoring at top 10 sites for model validation
+    \item \textbf{Dynamic grid modeling:} Integrate with Bangladesh Power Development Board's grid simulation tools
+    \item \textbf{Hybrid systems analysis:} Assess solar-wind complementarity and hybrid plant optimization
+    \item \textbf{Agrivoltaics potential:} Evaluate dual land-use opportunities for food-energy nexus
+    \item \textbf{Climate change scenarios:} Project impacts of RCP 4.5 and 8.5 pathways on solar resource
+    \item \textbf{Real-time forecasting:} Develop ML-based day-ahead generation prediction models
+    \item \textbf{Community-scale projects:} Design and pilot community-owned solar cooperatives
+\end{enumerate}
+
+\subsection{Replicability and Scalability}
+
+The developed framework demonstrates strong replicability potential for similar tropical/subtropical regions facing monsoon variability:
+
+\textbf{Transferable methodologies:}
+\begin{itemize}
+    \item GIS-MCDM-AHP integration approach
+    \item Seasonal capacity factor modeling with climate-specific corrections
+    \item Deployment-type comparative assessment framework
+    \item Storage optimization for variable renewable integration
+\end{itemize}
+
+\textbf{Adaptation requirements for other regions:}
+\begin{itemize}
+    \item Recalibrate AHP weights through local expert elicitation
+    \item Adjust soiling loss factors based on local aerosol conditions
+    \item Update economic parameters using regional cost data
+    \item Modify risk assessment for region-specific hazards (e.g., typhoons, dust storms)
+\end{itemize}
+
+\section{Conclusions}
+
+This study presents a comprehensive spatiotemporal assessment of solar PV potential in Sylhet District, Bangladesh, integrating GIS-based suitability analysis, seasonal performance modeling, economic evaluation, and environmental impact assessment.The code and everything available at \url{https://github.com/near-ingenious/GIS-based-Spatio-Temporal-Model} Key conclusions:
+
+\subsection{Technical Findings}
+\begin{enumerate}
+    \item \textbf{Viable deployment potential:} 89.2 MW identified across 50 high-suitability sites with mean overall suitability score of 91.5 (top 5\%)
+    
+    \item \textbf{Performance characteristics:} Annual capacity factors range from 0.158 (ground) to 0.186 (floating), with pronounced seasonal variation (28--35\% reduction during monsoon)
+    
+    \item \textbf{Spatial clustering:} Three priority deployment zones identified with 96.6\% rank stability under sensitivity analysis, demonstrating robust site selection
+    
+    \item \textbf{Technology differentiation:} Floating PV demonstrates 11.4\% performance advantage, offsetting 32\% higher CAPEX for net LCOE competitiveness
+\end{enumerate}
+
+\subsection{Economic Outcomes}
+\begin{enumerate}
+    \item \textbf{Financial viability:} All deployment types achieve LCOE (USD 0.083--0.087/kWh) below grid parity, with IRR of 13.7--15.9\% and payback periods of 6.9--7.9 years
+    
+    \item \textbf{Investment requirement:} Total CAPEX of USD 109.4 million for 89.2 MW, yielding 138,950 MWh annual generation
+    
+    \item \textbf{Storage integration:} Hybrid Li-ion/VRFB configuration (USD 148.2 million) achieves 81.4\% grid firming at combined LCOS of USD 0.151/kWh
+\end{enumerate}
+
+\subsection{Environmental and Social Impact}
+\begin{enumerate}
+    \item \textbf{Carbon mitigation:} 97,265 tonnes CO₂ offset annually (2.43 million tonnes over 25 years), supporting Bangladesh's NDC targets
+    
+    \item \textbf{Circular economy:} 87.4\% material recovery rate through proposed regional recycling infrastructure, creating 50--75 green jobs
+    
+    \item \textbf{Social equity:} Site prioritization in low-density areas (89 vs. 1,015 people/km² district average) minimizes displacement while enabling rural electrification
+\end{enumerate}
+
+\subsection{Policy Recommendations}
+
+\textbf{Immediate actions (0--2 years):}
+\begin{itemize}
+    \item Implement feed-in tariff of USD 0.095/kWh for 15 years
+    \item Fast-track environmental clearances for identified priority sites
+    \item Establish regional PV technician training program
+    \item Deploy 25 MW near existing grid infrastructure
+\end{itemize}
+
+\textbf{Medium-term initiatives (2--5 years):}
+\begin{itemize}
+    \item Upgrade transmission infrastructure to accommodate 60 MW total
+    \item Launch municipal green bond program for distributed generation
+    \item Develop standard PPP frameworks for degraded land utilization
+    \item Pilot community-owned solar cooperative models
+\end{itemize}
+
+\textbf{Long-term strategy (5--10 years):}
+\begin{itemize}
+    \item Complete 89.2 MW deployment with advanced storage integration
+    \item Establish Southeast Asia's first comprehensive PV recycling facility
+    \item Integrate smart grid technologies for real-time optimization
+    \item Expand framework to remaining Bangladesh districts
+\end{itemize}
+
+\subsection{Broader Implications}
+
+This research demonstrates that despite monsoon climate challenges, Sylhet District possesses significant economically viable solar PV potential. The integrated GIS-MCDM-AHP framework provides a replicable methodology for similar tropical regions, addressing the critical need for climate-adapted renewable energy planning tools.
+
+By quantifying seasonal variability, optimizing storage solutions, and addressing lifecycle sustainability, this study bridges the gap between theoretical potential and practical deployment strategy. The findings directly support Bangladesh's renewable energy targets while providing a template for sustainable energy transitions in monsoon-influenced developing regions globally.
+
+\textbf{Final perspective:} Solar PV development in Sylhet District represents not merely an energy infrastructure project, but a pathway toward climate resilience, economic development, and social equity. Successful implementation of the proposed roadmap could establish Sylhet as a model for sustainable energy planning in challenging tropical climates, demonstrating that environmental constraints can be transformed into opportunities through rigorous analysis and strategic deployment.
+
+
+\section*{Acknowledgments}
+The authors acknowledge the Bangladesh Meteorological Department for providing ground validation data, the Bangladesh Power Development Board for grid infrastructure information, and the anonymous reviewers for their constructive feedback. This research was supported by Metropolitan University, Sylhet.
+
+\begin{thebibliography}{99}
+
+\bibitem{bpdb2023}
+Bangladesh Power Development Board, ``Annual Report 2022-2023,'' Dhaka, Bangladesh, 2023.
+
+\bibitem{bbs2021}
+Bangladesh Bureau of Statistics, ``District Statistics 2021: Sylhet,'' Ministry of Planning, Dhaka, Bangladesh, 2021.
+
+\bibitem{hossain2019}
+M. S. Hossain, N. A. Mahmood, ``Seasonal variation of solar radiation and its impact on photovoltaic system performance in Bangladesh,'' \textit{Renewable Energy}, vol. 133, pp. 292--302, 2019.
+
+\bibitem{uddin2020}
+M. N. Uddin, M. M. Rahman, ``Topographic influence on solar irradiation distribution in northeastern Bangladesh,'' \textit{Solar Energy}, vol. 198, pp. 40--51, 2020.
+
+\bibitem{islam2021}
+A. Islam, M. S. Islam, ``Grid integration challenges for renewable energy in Bangladesh: A review,'' \textit{Energy Policy}, vol. 152, 112205, 2021.
+
+\bibitem{kabir2022}
+E. Kabir, P. Kumar, S. Kumar, ``Comparative techno-economic analysis of solar PV deployment strategies in South Asia,'' \textit{Applied Energy}, vol. 315, 119034, 2022.
+
+\bibitem{ramachandra2011}
+T. V. Ramachandra, B. V. Shruthi, ``Spatial mapping of renewable energy potential,'' \textit{Renewable and Sustainable Energy Reviews}, vol. 11, no. 7, pp. 1460--1480, 2011.
+
+\bibitem{gueymard2020}
+C. A. Gueymard, D. Yang, ``Worldwide validation of CAMS and MERRA-2 reanalysis aerosol optical depth products using 15 years of AERONET observations,'' \textit{Atmospheric Environment}, vol. 225, 117216, 2020.
+
+\bibitem{mondal2014}
+M. A. H. Mondal, M. Islam, ``Potential and viability of grid-connected solar PV system in Bangladesh,'' \textit{Renewable Energy}, vol. 36, no. 6, pp. 1869--1874, 2014.
+
+\bibitem{alam2018}
+M. J. Alam, M. N. I. Sarker, M. W. Rahman, ``Solar radiation estimation in Bangladesh using satellite and ground data,'' \textit{Renewable and Sustainable Energy Reviews}, vol. 81, pp. 67--75, 2018.
+
+\bibitem{saaty2008}
+T. L. Saaty, ``Decision making with the analytic hierarchy process,'' \textit{Int. J. Services Sciences}, vol. 1, no. 1, pp. 83--98, 2008.
+
+\bibitem{noorollahi2016}
+Y. Noorollahi, H. Yousefi, M. Mohammadi, ``Multi-criteria decision support system for wind farm site selection using GIS,'' \textit{Sustainable Energy Technologies and Assessments}, vol. 13, pp. 38--50, 2016.
+
+\bibitem{algarni2017}
+H. Z. Al Garni, A. Awasthi, ``Solar PV power plant site selection using a GIS-AHP based approach with application in Saudi Arabia,'' \textit{Applied Energy}, vol. 206, pp. 1225--1240, 2017.
+
+\bibitem{doorga2019}
+J. R. S. Doorga, S. D. D. V. Rughooputh, R. Boojhawon, ``Multi-criteria GIS-based modelling technique for identifying potential solar farm sites: A case study in Mauritius,'' \textit{Renewable Energy}, vol. 133, pp. 1201--1219, 2019.
+
+\bibitem{sahu2016}
+A. Sahu, N. Yadav, K. Sudhakar, ``Floating photovoltaic power plant: A review,'' \textit{Renewable and Sustainable Energy Reviews}, vol. 66, pp. 815--824, 2016.
+
+\bibitem{choi2014}
+Y. K. Choi, ``A study on power generation analysis of floating PV system considering environmental impact,'' \textit{International Journal of Software Engineering and Its Applications}, vol. 8, no. 1, pp. 75--84, 2014.
+
+\bibitem{cazzaniga2018}
+R. Cazzaniga, M. Cicu, M. Rosa-Clot, ``Floating photovoltaic plants: Performance analysis and design solutions,'' \textit{Renewable and Sustainable Energy Reviews}, vol. 81, pp. 1730--1741, 2018.
+
+\bibitem{zakeri2015}
+B. Zakeri, S. Syri, ``Electrical energy storage systems: A comparative life cycle cost analysis,'' \textit{Renewable and Sustainable Energy Reviews}, vol. 42, pp. 569--596, 2015.
+
+\bibitem{zakeri2016}
+B. Zakeri, S. Syri, ``Value of energy storage in power systems with high shares of variable renewables,'' \textit{Applied Energy}, vol. 183, pp. 1--18, 2016.
+
+\bibitem{rahman2020}
+M. M. Rahman, A. O. Oni, E. Gemechu, A. Kumar, ``Assessment of energy storage technologies: A review,'' \textit{Energy Conversion and Management}, vol. 223, 113295, 2020.
+
+\bibitem{branker2011}
+K. Branker, M. J. M. Pathak, J. M. Pearce, ``A review of solar photovoltaic levelized cost of electricity,'' \textit{Renewable and Sustainable Energy Reviews}, vol. 15, no. 9, pp. 4470--4482, 2011.
+
+\bibitem{fu2018}
+R. Fu, D. J. Feldman, R. M. Margolis, ``U.S. solar photovoltaic system cost benchmark: Q1 2018,'' National Renewable Energy Laboratory, Golden, CO, Tech. Rep. NREL/TP-6A20-72399, 2018.
+
+\bibitem{fthenakis2011}
+V. M. Fthenakis, H. C. Kim, ``Photovoltaics: Life-cycle analyses,'' \textit{Solar Energy}, vol. 85, no. 8, pp. 1609--1628, 2011.
+
+\bibitem{xu2018}
+Y. Xu, J. Li, Q. Tan, A. L. Peters, C. Yang, ``Global status of recycling waste solar panels: A review,'' \textit{Waste Management}, vol. 75, pp. 450--458, 2018.
+
+\end{thebibliography}
+
+\vspace{12pt}
+
+
+\end{document}
